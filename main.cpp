@@ -13,7 +13,7 @@ bool checkvalidity(string moten);
 bool verifier(int current_state, int current_index, string mCode);
 void convertInstruction(string input);
 int main() {
-	string input = "kin e = 1 ;";//ye input hain jo jarha
+	string input = "kin e ;";//ye input hain jo jarha
 
 	int i;
 	for (i = 0; i < input.size(); i++) {//ye puri string ka size tk chalanay k lie hain loop k sare elements check hon
@@ -414,7 +414,7 @@ bool var_dec(int current_state, int current_index,string mCode)
 	else if (current_state == 6 && mCode[current_index] == ';')
 	{
 		//cout << "expresion is valid \n" << mCode << endl;
-		if (current_index != mCode.length()) {
+		if (current_index != mCode.length()-1) {
 			return false;
 		}
 		else {
@@ -471,31 +471,37 @@ bool addition(int current_state, int current_index,string mCode)
 
 
 bool isVaraibleassign(string s) {
-	if (var_assign(0, 0,s) == true);
-	return true;
+	if (var_assign(0, 0, s) == true)
+		return true;
+	else return false;
 }
 bool isVaraibleDeclaration(string s) {
-	if (var_dec(0, 0,s) == true);
-	return true;
+	if (var_dec(0, 0, s) == true)
+		return true;
+	else return false;
 }
 
 
 bool isVaraibleaddition(string s) {
-	if(addition(0,0,s))
-	return true;
+	if (addition(0, 0, s))
+		return true;
+	else return  false;
 }
 
 void convertInstruction(string s) {
 	int mTemp = 0;
 
 	if (isVaraibleassign(s) == true) {
+		cout << "Three Address code for this:" << endl;
 		cout << "mov T" << mTemp << " , " << s[6] << endl;
 	}
 	else if (isVaraibleDeclaration(s) == true) {
+		cout << "Three Addess Code For this :" << endl;
 		cout << "li $T" << mTemp << " , " << " 0 " << endl;
 	}
 	else if (isVaraibleaddition(s) == true)
 	{
+		cout << "Three Address Code for This :" << endl;
 		cout << " t" << mTemp << " = " << s[0] << " + " << s[4] << endl;
 	}
 }
