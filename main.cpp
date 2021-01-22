@@ -88,7 +88,7 @@ bool isInteger(string str)
 	return (true);
 }
 
-bool isDelimiter(char ch)//to find single brackets
+bool isDelimiter(char ch)
 {
 	if (ch == ' ' ||
 
@@ -103,11 +103,11 @@ bool isDelimiter(char ch)//to find single brackets
 	return (false);
 }
 
-int keyword(string tempch) {//declaring default Keyword functions
-	string keywords[5] = { "khile","kif","klse","kin","kloat" };//ye tmhare keywords hain array ka size brhao or keywords daldo
+int keyword(string tempch) {
+	string keywords[5] = { "khile","kif","klse","kin","kloat" };
 	int i, flag = 0;
 
-	for (i = 0; i < 5; ++i) {//jitne keywords hain i< (utna size ) hoga jaisay k abhi 7 keywords hain
+	for (i = 0; i < 5; ++i) {
 		if (keywords[i] == tempch) {
 			flag = 1;
 			break;
@@ -116,7 +116,7 @@ int keyword(string tempch) {//declaring default Keyword functions
 
 	return flag;
 }
-bool recognizeOp(string mtoken) {//operator check krne k lie mera function hai
+bool recognizeOp(string mtoken) {
 	if (mtoken == "++") {
 		cout << "++ is an operator " << endl; return true;
 	}
@@ -126,10 +126,10 @@ bool recognizeOp(string mtoken) {//operator check krne k lie mera function hai
 	else if (mtoken == "+")
 	{
 		cout << "+ is an operator " << endl; return true;
-	}//check if + or ++ exists;
+	}
 	else if (mtoken == "-") {
 		cout << "- is an operator " << endl; return true;
-	}//check if - or -- exists;
+	}
 	else if (mtoken == "%")
 	{
 		cout << "% is an operator " << endl; return true;
@@ -161,7 +161,6 @@ int ident(string tempch) {
 
 
 
-//Check DFA 1/2/2020
 
 
 
@@ -380,7 +379,6 @@ bool var_assign(int current_state, int current_index,string mCode)
 
 bool var_dec(int current_state, int current_index,string mCode)
 {
-	//int e;
 	if (current_state == 0 && mCode[current_index] == 'k')
 	{
 		current_state = 1;
@@ -413,7 +411,6 @@ bool var_dec(int current_state, int current_index,string mCode)
 	}
 	else if (current_state == 6 && mCode[current_index] == ';')
 	{
-		//cout << "expresion is valid \n" << mCode << endl;
 		if (current_index != mCode.length()-1) {
 			return false;
 		}
@@ -428,7 +425,6 @@ bool var_dec(int current_state, int current_index,string mCode)
 
 bool addition(int current_state, int current_index,string mCode)
 {
-	//e=e+1 ;
 	if (current_state == 0 && mCode[current_index] == 'e')
 	{
 		current_state = 1;
@@ -476,8 +472,10 @@ bool isVaraibleassign(string s) {
 	else return false;
 }
 bool isVaraibleDeclaration(string s) {
-	if (var_dec(0, 0, s) == true)
+	if (var_dec(0, 0, s) == true) {
+	
 		return true;
+	}
 	else return false;
 }
 
