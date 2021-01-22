@@ -1,23 +1,21 @@
-///CC project of FSOCIETY
-//including header files
-
 #include<iostream>
 #include<string>
 
 using namespace std;
 //function headers
-void check_dfa(int current_state,string mtoken);
+void check_dfa(int current_state, string mtoken);
 bool isDelimiter(char ch);
 bool isInteger(string str);
 int keyword(string tempch);
 bool recognizeOp(string mtoken);
 int ident(string tempch);
 bool checkvalidity(string moten);
-
+bool verifier(int current_state, int current_index, string mCode);
+void convertInstruction(string input);
 int main() {
-	string input = "khile";//ye input hain jo jarha
+	string input = "kin e = 1 ;";//ye input hain jo jarha
 
-	int i, k;
+	int i;
 	for (i = 0; i < input.size(); i++) {//ye puri string ka size tk chalanay k lie hain loop k sare elements check hon
 		string mtoken = "";//mtoken nam ki string initialize krarhe hain take eik eik token bnaskein
 		while (input[i] != ' ' && i < input.length()) {//ye jb tk sapce na aye eik token bnata rhee
@@ -42,26 +40,27 @@ int main() {
 					cout << mtoken << "   it is demiliter: " << endl;
 				}
 			}
-				int j = 0;
-				if (keyword(mtoken) == 1)
-				{
-					cout << mtoken << " is a keyword" << endl;
-					if (checkvalidity(mtoken)) {
-						cout << "its Valid." << endl;
-					}
-					else cout << "Its Invalid." << endl;
-					
-				}//agr keyword hoga to ye true hoga
-
-	//yahan else pr tmhara IDENTIFIER KA CODE AYEGA, sample code hai neche jo pehle sahi chalrha tha
-				else if (ident(mtoken) == 1) {
-					cout << mtoken << " is an identifier" << endl;
+			if (keyword(mtoken) == 1)
+			{
+				cout << mtoken << " is a keyword" << endl;
+				if (checkvalidity(mtoken)) {
+					cout << "its Valid." << endl;
 				}
+				else cout << "Its Invalid." << endl;
 
-				mtoken = "";
-			
+			}//agr keyword hoga to ye true hoga
+
+//yahan else pr tmhara IDENTIFIER KA CODE AYEGA, sample code hai neche jo pehle sahi chalrha tha
+			else if (ident(mtoken) == 1) {
+				cout << mtoken << " is an identifier" << endl;
+			}
+
+			mtoken = "";
+
 		}
 	}
+
+	convertInstruction(input);
 	return 0;
 }
 
@@ -177,7 +176,7 @@ bool Check_DFA_INT(int pCurrentState, int pCurrentIndex, string pUserInput)
 	{
 		return Check_DFA_INT(2, pCurrentIndex + 1, pUserInput);
 	}
-		else if (pCurrentState == 2 && pUserInput[pCurrentIndex] == 'n')
+	else if (pCurrentState == 2 && pUserInput[pCurrentIndex] == 'n')
 	{
 		if (pUserInput.size() == 3) {
 			return true;
@@ -300,11 +299,205 @@ bool Check_DFA_Kloat(int pCurrentState, int pCurrentIndex, string pUserInput)
 
 bool checkvalidity(string mtoken) {
 
-	if (Check_DFA_INT(0, 0, mtoken)) return true; 
-	else if (Check_DFA_Kloat(0, 0, mtoken)) return true; 
-	else if (Check_DFA_Khile(0, 0, mtoken)) return true; 
+	if (Check_DFA_INT(0, 0, mtoken)) return true;
+	else if (Check_DFA_Kloat(0, 0, mtoken)) return true;
+	else if (Check_DFA_Khile(0, 0, mtoken)) return true;
 	else if (Check_DFA_klse(0, 0, mtoken)) return true;
-	else if (Check_DFA_KIF(0, 0, mtoken)) return true; 
+	else if (Check_DFA_KIF(0, 0, mtoken)) return true;
 	else return false;
 
 }
+//----------------------CFGs------------------------------------------------------------------------------
+bool var_assign(int current_state, int current_index,string mCode)
+{
+	
+	if (current_state == 0 && mCode[current_index] == 'k')
+	{
+		current_state = 1;
+		return var_assign(current_state, current_index + 1,mCode);
+	}
+	else if (current_state == 1 && mCode[current_index] == 'i')
+	{
+		current_state = 2;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 2 && mCode[current_index] == 'n')
+	{
+		current_state = 3;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 3 && mCode[current_index] == ' ')
+	{
+		current_state = 4;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 4 && mCode[current_index] == 'e')
+	{
+		current_state = 5;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 5 && mCode[current_index] == ' ')
+	{
+		current_state = 6;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 6 && mCode[current_index] == '=')
+	{
+		current_state = 7;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+
+	else if (current_state == 7 && mCode[current_index] == ' ')
+	{
+		current_state = 8;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+
+	else if (current_state == 8 && mCode[current_index] == '1')
+	{
+		current_state = 9;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 9 && mCode[current_index] == ' ')
+	{
+		current_state = 10;
+		return var_assign(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 10 && mCode[current_index] == ';')
+	{
+		cout << "expresion is valid \n" << mCode << endl;
+		if (current_index != mCode.length()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
+
+}
+
+bool var_dec(int current_state, int current_index,string mCode)
+{
+	//int e;
+	if (current_state == 0 && mCode[current_index] == 'k')
+	{
+		current_state = 1;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 1 && mCode[current_index] == 'i')
+	{
+		current_state = 2;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 2 && mCode[current_index] == 'n')
+	{
+		current_state = 3;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 3 && mCode[current_index] == ' ')
+	{
+		current_state = 4;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 4 && mCode[current_index] == 'e')
+	{
+		current_state = 5;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 5 && mCode[current_index] == ' ')
+	{
+		current_state = 6;
+		return var_dec(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 6 && mCode[current_index] == ';')
+	{
+		//cout << "expresion is valid \n" << mCode << endl;
+		if (current_index != mCode.length()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
+
+}
+
+bool addition(int current_state, int current_index,string mCode)
+{
+	//e=e+1 ;
+	if (current_state == 0 && mCode[current_index] == 'e')
+	{
+		current_state = 1;
+		return addition(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 1 && mCode[current_index] == '=')
+	{
+		current_state = 2;
+		return addition(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 2 && mCode[current_index] == 'e')
+	{
+		current_state = 3;
+		return addition(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 3 && mCode[current_index] == '+')
+	{
+		current_state = 4;
+		return addition(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 4 && mCode[current_index] == '1')
+	{
+		current_state = 5;
+		return addition(current_state, current_index + 1, mCode);
+	}
+	else if (current_state == 5 && mCode[current_index] == ';')
+	{
+		cout << "expresion is valid \n" << mCode << endl;
+		if (current_index != mCode.length()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+
+	}
+
+
+}
+
+
+bool isVaraibleassign(string s) {
+	if (var_assign(0, 0,s) == true);
+	return true;
+}
+bool isVaraibleDeclaration(string s) {
+	if (var_dec(0, 0,s) == true);
+	return true;
+}
+
+
+bool isVaraibleaddition(string s) {
+	if(addition(0,0,s))
+	return true;
+}
+
+void convertInstruction(string s) {
+	int mTemp = 0;
+
+	if (isVaraibleassign(s) == true) {
+		cout << "mov T" << mTemp << " , " << s[6] << endl;
+	}
+	else if (isVaraibleDeclaration(s) == true) {
+		cout << "li $T" << mTemp << " , " << " 0 " << endl;
+	}
+	else if (isVaraibleaddition(s) == true)
+	{
+		cout << " t" << mTemp << " = " << s[0] << " + " << s[4] << endl;
+	}
+}
+
+
